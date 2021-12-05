@@ -10,9 +10,9 @@ module Sorcery
           base.send(:include, InstanceMethods)
           Config.module_eval do
             class << self
-              attr_accessor :remember_me_httponly
+              attr_accessor :remember_me_httponly, :remember_me_secure
               def merge_remember_me_defaults!
-                @defaults.merge!(:@remember_me_httponly => true)
+                @defaults.merge!(:@remember_me_httponly => true, :@remember_me_secure => false)
               end
             end
             merge_remember_me_defaults!
@@ -56,7 +56,7 @@ module Sorcery
           # Runs as a login source. See 'current_user' method for how it is used.
           def login_from_cookie
             user = cookies.signed[:remember_me_token] && user_class.sorcery_adapter.find_by_remember_me_token(cookies.signed[:remember_me_token]) if defined? cookies
-            if user && user.has_remember_me_token?
+            if user&.has_remember_me_token?
               set_remember_me_cookie!(user)
               session[:user_id] = user.id.to_s
               after_remember_me!(user)
@@ -71,7 +71,8 @@ module Sorcery
               value: user.send(user.sorcery_config.remember_me_token_attribute_name),
               expires: user.send(user.sorcery_config.remember_me_token_expires_at_attribute_name),
               httponly: Config.remember_me_httponly,
-              domain: Config.cookie_domain
+              domain: Config.cookie_domain,
+              secure: Config.remember_me_secure
             }
           end
         end

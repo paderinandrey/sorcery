@@ -31,6 +31,11 @@ Rails.application.config.sorcery.configure do |config|
   #
   # config.remember_me_httponly =
 
+  # Set secure flag for remember_me cookie
+  # Default: `false`
+  #
+  # config.remember_me_secure =
+
   # Set token randomness. (e.g. user activation tokens)
   # The length of the result string is about 4/3 of `token_randomness`.
   # Default: `15`
@@ -226,7 +231,6 @@ Rails.application.config.sorcery.configure do |config|
   # config.line.bot_prompt = "normal"
   # config.line.user_info_mapping = {name: 'displayName'}
 
-  
   # For information about Discord API
   # https://discordapp.com/developers/docs/topics/oauth2
   # config.discord.key = "xxxxxx"
@@ -563,5 +567,5 @@ Rails.application.config.sorcery.configure do |config|
 
   # This line must come after the 'user config' block.
   # Define which model authenticates with sorcery.
-  config.user_class = "<%= model_class_name %>"
+  config.user_class = '<%= model_class_name %>'
 end
